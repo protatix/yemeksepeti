@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+   <link rel="stylesheet" href="./sass/style.css" />
+   <title>Yemeksepeti</title>
+</head>
+<body>
+   <div class="navbar">
+      <a href="./"><img src="./img/logo.png" alt="Logo" /></a>
+    </div>
+    <div class="search-container">
+      <input id="searchId" onkeyup="searchFunction()" type="text" maxlength= "15" placeholder="Search..." class="search">
+    </div>
+    <div class="row">
+       <div class="left">
+         <h1>Ürünler</h1>
+       </div>
+       <div class="right">
+          <h1>Sepetim</h1>
+          <div class="checkout">
+          </div>
+          <div class="total">
+            <hr>
+            <p>Toplam <span class="price" style="color:black"><b>0 TRY</b></span></p>
+          </div>
+          <button  class="button" onclick="location.href = 'https://www.yemeksepeti.com/' ">Siparis Ver!</button>
+       </div>
+    </div>
+</body>
+<script src="./js/menu.js"></script>
+<script src="./js/modal.js"></script>
+<script src="./js/search.js"></script>
+<script>
+
+window.onload = () => {
+   console.log('sayfa yuklendi');
+   let products = document.querySelector('.left');
+   let xhr = new XMLHttpRequest();
+   xhr.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      let myJson = JSON.parse(this.responseText);
+      myJson = myJson.d.ResultSet;
+      let menu = new Menu(myJson);
+      menu.createProducts(products);
+      var m = new Modal();
+    }
+  };
+  xhr.open("GET", "./json/menuData.json", true);
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.send();
+}
+
+
+let searchFunction = () => {
+   let myElement = document.getElementById("searchId"),
+         filter = null,
+         _s = new Search({
+           term:myElement.value,
+         });
+  //  _s.searchFunc(myElement.value);
+}
+</script>
+</html>
